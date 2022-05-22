@@ -6,9 +6,13 @@ use tokio::{net::UdpSocket, time::timeout};
 async fn main() -> io::Result<()> {
   //Parse input and create socket address for server and client
   let args: Vec<String> = env::args().collect();
-  if args.len() != 2 {
-    panic!("Usage: sftp_client <server_ipaddr>");
+  if args.len() != 3 {
+    panic!("Usage: sftp_client <server_ipaddr> <file>");
   }
+
+  //Open file to read
+  let file = File::open(&args[2])?;
+
   let server_ipaddr = &args[1];
   let server_port = "9093";
   let client_port = "8080";
@@ -30,13 +34,11 @@ async fn main() -> io::Result<()> {
   let sock = UdpSocket::bind(client_addr).await?;
   let mut buf = [0; 513];
 
-  //Open file to read
-  let file = File::open("inputfile")?;
-  let mut byte_counter: u64 = 0;
-  let mut eof = false;
-
   let retransmission_timer = 1;
   let retransmission_limit = 5;
+
+  let mut byte_counter: u64 = 0;
+  let mut eof = false;
 
   let timer_start = Utc::now();
 
