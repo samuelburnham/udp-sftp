@@ -1,0 +1,10 @@
+[package]
+name = "udp-sftp"
+version = "0.1.0"
+authors = ["samuelburnham <samuel.burnham@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+tokio = { version = "0.3", features = ["full"] }
+rand = "0.7"
+chrono = "0.4"
